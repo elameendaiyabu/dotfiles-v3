@@ -47,6 +47,7 @@ bindsym $mod+e exec nautilus
 bindsym $mod+Shift+o exec obs
 bindsym $mod+m exec spotify-launcher
 bindsym $mod+o exec obsidian
+bindsym $mod+l exec localsend
 bindsym $mod+a exec "rofi -show drun -dpi 1"
 bindsym $mod+F6 exec "flameshot gui -p ~/Pictures/screenshots/"
 
