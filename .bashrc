@@ -23,6 +23,7 @@ alias ....='cd ../..'
 alias ......='cd ../../..'
 alias tor='sudo /usr/bin/tor'
 alias vpn='sudo openvpn /etc/openvpn/client/vpn.protonvpn.udp.ovpn'
+alias usvpn='sudo openvpn /etc/openvpn/client/us.protonvpn.udp.ovpn'
 
 PS1='[\u@\h \W]\$ '
 
