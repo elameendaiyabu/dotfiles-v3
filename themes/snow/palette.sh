@@ -1,0 +1,6 @@
+LABEL="Snow"; MODE=light
+BG=#ffffff BG_DARK=#f2f2f2 BG_DARKER=#e6e6e6 SURFACE=#f7f7f7 SEL=#e0e0e0 MUTED=#919191
+FG=#0a0a0a FG_DIM=#565656 ACCENT=#0a0a0a ACCENT2=#565656
+RED=#0a0a0a ORANGE=#0a0a0a YELLOW=#0a0a0a GREEN=#0a0a0a CYAN=#0a0a0a BLUE=#0a0a0a MAGENTA=#0a0a0a
+TERM_COLORS=("#0a0a0a" "#0a0a0a" "#0a0a0a" "#0a0a0a" "#0a0a0a" "#0a0a0a" "#0a0a0a" "#919191" "#565656" "#0a0a0a" "#0a0a0a" "#0a0a0a" "#0a0a0a" "#0a0a0a" "#0a0a0a" "#565656")
+NVIM_SCHEME=base16

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# powermenu — themed rofi power menu with confirmation for destructive actions.
+lock="󰌾  Lock" suspend="󰤄  Suspend" logout="󰍃  Logout" reboot="󰜉  Reboot" shutdown="󰐥  Shutdown"
+
+menu() { rofi -dmenu -i -p "$1" -theme "$HOME/.config/rofi/powermenu.rasi" "${@:2}"; }
+confirm() { [[ $(printf '󰄬  Yes\n󰅖  No\n' | menu "$1? " -selected-row 1) == *Yes ]]; }
+
+choice=$(printf '%s\n' "$lock" "$suspend" "$logout" "$reboot" "$shutdown" | menu "󰐥 " -mesg "󰔟  up $(uptime -p | sed 's/up //')") || exit 0
+case $choice in
+"$lock") exec "$HOME/.config/themes/bin/lock" ;;
+"$suspend") systemctl suspend ;;
+"$logout") confirm "Log out" && i3-msg exit ;;
+"$reboot") confirm "Reboot" && systemctl reboot ;;
+"$shutdown") confirm "Shut down" && systemctl poweroff ;;
+esac

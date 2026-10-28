@@ -1,18 +1,23 @@
 # Alt is set as Mod key. change to Mod4 to use super
 set $mod Mod1
 exec_always --no-startup-id clipcatd
-exec_always --no-startup-id killall polybar
-exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
-exec_always --no-startup-id feh --bg-scale ~/Pictures/Backgrounds/arch.png
+# theme: wallpaper, polybar and every app colour come from theme-switch
+include ~/.config/themes/current/i3.conf
+exec_always --no-startup-id ~/.config/themes/bin/theme-switch --restore
 exec_always --no-startup-id systemctl --user start docker-desktop 
 # Font 
-font pango:CaskaydiaCove Nerd Font Mono 8
+font pango:CaskaydiaCove Nerd Font Mono 10
+
+gaps inner 10
+gaps outer 6
+gaps top 48
 
 exec_always --no-startup-id xset s off
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id picom
-set $lock i3lock -i ~/Pictures/Backgrounds/arch.png
-exec --no-startup-id xss-lock --transfer-sleep-lock -- $lock --nofork
+set $lock ~/.config/themes/bin/lock
+
+exec --no-startup-id xss-lock --transfer-sleep-lock -- $lock
 exec --no-startup-id nm-applet
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -20,35 +25,48 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10
-bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10-
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 5%+
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
 
 bindsym XF86KbdBrightnessUp exec --no-startup-id brightnessctl --device='asus::kbd_backlight' set +1
 bindsym XF86KbdBrightnessDown exec --no-startup-id brightnessctl --device='asus::kbd_backlight' set 1-
 
 bindsym $mod+F1 exec --no-startup-id ~/.config/custom-scripts/wifi-menu.sh
-bindsym XF86Launch4 exec --no-startup-id asusctl profile -n
+bindsym XF86Launch4 exec --no-startup-id asusctl profile next
 bindsym XF86Launch3 exec --no-startup-id asusctl led-mode -n
-bindsym $mod+p exec --no-startup-id polybar-msg cmd toggle
+
+bindsym $mod+p exec --no-startup-id ~/.config/custom-scripts/zen-toggle.sh
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 tiling_drag modifier titlebar
 
 # Lock screen
-bindsym $mod+F10 exec i3lock -i ~/Pictures/Backgrounds/arch.png
+bindsym $mod+F10 exec --no-startup-id $lock
+
+# Themes: picker / next theme / next wallpaper
+bindsym $mod+y exec --no-startup-id ~/.config/themes/bin/theme-picker
+bindsym $mod+Shift+y exec --no-startup-id ~/.config/themes/bin/theme-switch --next
+bindsym $mod+Ctrl+y exec --no-startup-id ~/.config/themes/bin/theme-switch --wall next
+
+# Notifications
+bindsym $mod+n exec --no-startup-id dunstctl close-all
+bindsym $mod+Shift+n exec --no-startup-id dunstctl history-pop
 
 # Application shortcuts
 bindsym $mod+Return exec kitty
 bindsym $mod+b exec firefox
-bindsym $mod+t exec telegram-desktop
+bindsym $mod+c exec flatpak run com.google.Chrome
+bindsym $mod+t exec materialgram
 bindsym $mod+d exec discord
 bindsym $mod+r exec rog-control-center
 bindsym $mod+e exec nautilus
+bindsym $mod+Shift+w exec "libreoffice --writer"
 bindsym $mod+Shift+o exec obs
 bindsym $mod+m exec spotify-launcher
 bindsym $mod+o exec obsidian
+bindsym $mod+Shift+a exec "flatpak run com.google.Chrome --new-window --app='https://chatgpt.com'"
 bindsym $mod+a exec "rofi -show drun -dpi 1"
-bindsym $mod+F6 exec "flameshot gui -p ~/Pictures/screenshots/"
+bindsym $mod+F6 exec "scrot -s '/home/alamin/Pictures/screenshots/%Y-%m-%d-%H%M%S.png'"
 
 
 bindsym $mod+Shift+v exec --no-startup-id clipcat-menu --finder rofi
@@ -146,7 +164,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec --no-startup-id ~/.config/themes/bin/powermenu
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -164,9 +182,18 @@ mode "resize" {
         # back to normal: Enter or Escape or $mod+r
         bindsym Return mode "default"
         bindsym Caps_Lock mode "default"
-        bindsym $mod+r mode "default"
+        bindsym $mod+z mode "default"
 }
 
-#bindsym $mod+r mode "resize"
-default_border pixel 1
-hide_edge_borders horizontal
+##bindsym $mod+z mode "resize"
+default_border pixel 2
+default_floating_border pixel 2
+hide_edge_borders none
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [class="Pavucontrol|pavucontrol|Nm-connection-editor|Blueman-manager"] floating enable, resize set 900 600, move position center
+
+# Toggle touchpad (Fn touchpad key, or Alt+Shift+t)
+bindsym XF86TouchpadToggle exec --no-startup-id ~/.local/bin/touchpad-toggle.sh
+bindsym $mod+Shift+t exec --no-startup-id ~/.local/bin/touchpad-toggle.sh

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# theme-picker — rofi grid of themes with wallpaper previews.
+THEMES="$HOME/.config/themes"
+switch="$THEMES/bin/theme-switch"
+cur=$("$switch" --current)
+"$switch" --previews >/dev/null 2>&1
+
+entries=() names=() sel=0 i=0
+for t in $("$switch" --list); do
+	label=$(. "$THEMES/$t/palette.sh"; echo "$LABEL")
+	[[ $t == "$cur" ]] && sel=$i label="$label  ●"
+	entries+=("$label\0icon\x1f$THEMES/$t/preview.png")
+	names+=("$t")
+	((i++))
+done
+
+idx=$(printf '%b\n' "${entries[@]}" | rofi -dmenu -i -format i -selected-row "$sel" \
+	-p "󰏘 " -theme "$HOME/.config/rofi/picker.rasi") || exit 0
+[[ -n $idx ]] && exec "$switch" "${names[$idx]}"

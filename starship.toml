@@ -1,16 +1,60 @@
-# Get editor completions based on the config schema
-"$schema" = 'https://starship.rs/config-schema.json'
+# >>> theme-switch palette >>>
+palette = "system"
 
+[palettes.system]
+black = "#1c2225"
+red = "#f57f82"
+green = "#cbe3b3"
+yellow = "#f5d098"
+blue = "#b3e6db"
+purple = "#cbe3b3"
+cyan = "#b3e6db"
+white = "#adc9bc"
+bright-black = "#6f8788"
+# <<< theme-switch palette <<<
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$cmd_duration\
+$line_break\
+$python\
+$character"""
 
-# Inserts a blank line between shell prompts
-add_newline = false
+[directory]
+style = "blue"
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+[character]
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](green)"
 
-# Disable the package module, hiding it from the prompt completely
-[package]
-disabled = true
+[git_branch]
+format = "[$branch]($style)"
+style = "bright-black"
 
-command_timeout = 3600000
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
+
+[python]
+format = "[$virtualenv]($style) "
+style = "bright-black"

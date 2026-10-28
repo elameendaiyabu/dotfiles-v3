@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# lock — i3lock-color styled from the current theme. Stays in the foreground
+# (-n) so xss-lock can hold the sleep inhibitor until the screen is locked.
+THEMES="$HOME/.config/themes"
+. "$THEMES/$(cat "$THEMES/current/name")/palette.sh"
+a() { echo "${1#\#}${2:-ff}"; }
+
+font="JetBrainsMono Nerd Font"
+dunstctl set-paused true 2>/dev/null
+i3lock -n -e -i "$THEMES/current/lock.png" \
+	--force-clock --time-str="%H:%M" --date-str="%A, %d %B" \
+	--time-font="$font:style=Bold" --date-font="$font" --verif-font="$font" --wrong-font="$font" --layout-font="$font" \
+	--time-size=120 --date-size=30 \
+	--time-color="$(a "$FG")" --date-color="$(a "$FG_DIM")" \
+	--time-pos="x+w/2:y+h/2-90" --date-pos="tx:ty+70" \
+	--ind-pos="x+w/2:y+h/2+170" --radius=46 --ring-width=6 \
+	--inside-color="$(a "$BG" 66)" --ring-color="$(a "$SEL" cc)" --line-uses-inside \
+	--separator-color=00000000 \
+	--keyhl-color="$(a "$ACCENT")" --bshl-color="$(a "$RED")" \
+	--insidever-color="$(a "$BG" 66)" --ringver-color="$(a "$ACCENT2")" \
+	--insidewrong-color="$(a "$RED" 33)" --ringwrong-color="$(a "$RED")" \
+	--verif-text="" --wrong-text="" --noinput-text="" --lock-text="" --lockfailed-text="" \
+	--verif-color="$(a "$FG")" \
+	--pass-media-keys --pass-screen-keys --pass-volume-keys
+dunstctl set-paused false 2>/dev/null

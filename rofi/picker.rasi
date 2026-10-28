@@ -1,0 +1,8 @@
+@import "~/.config/rofi/system.rasi"
+
+window   { width: 62%; }
+listview { columns: 4; lines: 2; spacing: 0.6em; fixed-columns: true; }
+element  { orientation: vertical; padding: 0.6em; spacing: 0.4em; border-radius: 14px; }
+element-icon { size: 7.5em; }
+element-text { horizontal-align: 0.5; }
+entry    { placeholder: "Pick a theme…"; }

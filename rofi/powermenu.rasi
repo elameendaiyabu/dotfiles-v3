@@ -1,0 +1,6 @@
+@import "~/.config/rofi/system.rasi"
+
+window   { width: 22em; }
+listview { lines: 5; }
+inputbar { children: [ prompt ]; }
+element  { padding: 0.7em 1em; }

@@ -1,0 +1,64 @@
+/* Colors come from the active system theme (theme-switch). */
+@import "~/.config/themes/current/rofi.rasi"
+
+* {
+    font:             "JetBrainsMono Nerd Font Propo 11";
+    background-color: transparent;
+    text-color:       @fg;
+    spacing:          0;
+}
+
+window {
+    width:            36em;
+    location:         center;
+    anchor:           center;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    16px;
+    background-color: @bg-trans;
+}
+
+mainbox {
+    padding:  1.1em;
+    spacing:  0.9em;
+    children: [ inputbar, message, listview ];
+}
+
+inputbar {
+    padding:          0.7em 1em;
+    spacing:          0.6em;
+    border-radius:    12px;
+    background-color: @surface;
+    children:         [ prompt, entry ];
+}
+prompt { text-color: @accent; }
+entry  { placeholder: "Search…"; placeholder-color: @muted; cursor: text; }
+
+message { padding: 0.6em 1em; border-radius: 12px; background-color: @surface; }
+textbox { text-color: @fg-dim; }
+
+listview {
+    lines:        8;
+    columns:      1;
+    spacing:      0.25em;
+    fixed-height: true;
+    dynamic:      true;
+    cycle:        true;
+    scrollbar:    false;
+}
+
+element {
+    padding:       0.55em 0.9em;
+    spacing:       0.9em;
+    border-radius: 10px;
+    cursor:        pointer;
+}
+element normal.normal, element alternate.normal { text-color: @fg; }
+element normal.active, element alternate.active { text-color: @accent2; }
+element normal.urgent, element alternate.urgent { text-color: @red; }
+element selected.normal { background-color: @accent; text-color: @bg; }
+element selected.active { background-color: @accent2; text-color: @bg; }
+element selected.urgent { background-color: @red; text-color: @bg; }
+
+element-icon { size: 1.5em; background-color: transparent; }
+element-text { vertical-align: 0.5; text-color: inherit; highlight: bold; }
