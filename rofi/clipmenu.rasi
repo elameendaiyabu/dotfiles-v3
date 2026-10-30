@@ -1,0 +1,12 @@
+@import "~/.config/rofi/system.rasi"
+
+configuration { show-icons: false; }
+
+window   { width: 50em; }
+mainbox  { children: [ inputbar, listview, message ]; spacing: 0.7em; }
+listview { lines: 9; spacing: 0.15em; }
+element  { padding: 0.4em 0.9em; children: [ element-text ]; }
+element-text { font: "JetBrainsMono Nerd Font 10"; }
+message  { padding: 0.45em 1em; }
+textbox  { font: "JetBrainsMono Nerd Font Propo 9"; horizontal-align: 0.5; }
+entry    { placeholder: "Search clipboard…"; }

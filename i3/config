@@ -1,6 +1,6 @@
 # Alt is set as Mod key. change to Mod4 to use super
 set $mod Mod1
-exec_always --no-startup-id clipcatd
+exec --no-startup-id clipcatd
 # theme: wallpaper, polybar and every app colour come from theme-switch
 include ~/.config/themes/current/i3.conf
 exec_always --no-startup-id ~/.config/themes/bin/theme-switch --restore
@@ -12,7 +12,7 @@ gaps inner 10
 gaps outer 6
 gaps top 48
 
-exec_always --no-startup-id xset s off
+exec_always --no-startup-id ~/.config/custom-scripts/screen-timeout.sh --restore
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id picom
 set $lock ~/.config/themes/bin/lock
@@ -31,7 +31,9 @@ bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
 bindsym XF86KbdBrightnessUp exec --no-startup-id brightnessctl --device='asus::kbd_backlight' set +1
 bindsym XF86KbdBrightnessDown exec --no-startup-id brightnessctl --device='asus::kbd_backlight' set 1-
 
-bindsym $mod+F1 exec --no-startup-id ~/.config/custom-scripts/wifi-menu.sh
+# Wi-Fi: wifitui as a floating popup (press again to close)
+bindsym $mod+F1 exec --no-startup-id ~/.config/custom-scripts/wifi-popup.sh
+for_window [class="^wifi-popup$"] floating enable, resize set 1700 1050, move position center
 bindsym XF86Launch4 exec --no-startup-id asusctl profile next
 bindsym XF86Launch3 exec --no-startup-id asusctl led-mode -n
 
@@ -69,7 +71,10 @@ bindsym $mod+a exec "rofi -show drun -dpi 1"
 bindsym $mod+F6 exec "scrot -s '/home/alamin/Pictures/screenshots/%Y-%m-%d-%H%M%S.png'"
 
 
-bindsym $mod+Shift+v exec --no-startup-id clipcat-menu --finder rofi
+# Clipboard: history menu / pause-resume recording
+bindsym $mod+Shift+v exec --no-startup-id ~/.config/custom-scripts/clipboard-menu.sh
+bindsym $mod+Ctrl+v exec --no-startup-id ~/.config/custom-scripts/clipboard-menu.sh --toggle
+for_window [class="floating-editor"] floating enable, resize set 1600 900, move position center
 # kill focused window
 bindsym $mod+q kill
 
@@ -192,6 +197,9 @@ hide_edge_borders none
 
 for_window [window_role="pop-up"] floating enable
 for_window [window_type="dialog"] floating enable
+# Chrome app windows (PWAs, --app=) also use role "pop-up" — keep them tiled
+for_window [instance="^crx_"] floating disable
+for_window [instance="^chatgpt\.com"] floating disable
 for_window [class="Pavucontrol|pavucontrol|Nm-connection-editor|Blueman-manager"] floating enable, resize set 900 600, move position center
 
 # Toggle touchpad (Fn touchpad key, or Alt+Shift+t)
