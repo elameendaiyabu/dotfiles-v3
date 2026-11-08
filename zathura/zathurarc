@@ -1,0 +1,23 @@
+# zathura — colours come from ~/.config/themes/current/zathura (theme-switch)
+
+# copy selected text to the system clipboard (Ctrl+V), not just PRIMARY
+set selection-clipboard clipboard
+
+set font                  "JetBrainsMono Nerd Font 10"
+set guioptions            ""
+set adjust-open           "best-fit"
+set pages-per-row         1
+set scroll-page-aware     true
+set smooth-scroll         true
+set scroll-step           80
+set zoom-min              10
+set window-title-basename true
+set statusbar-home-tilde  true
+set incremental-search    true
+set database              "sqlite"
+
+# Ctrl+R toggles recolour (dark-mode pages in theme colours)
+set recolor               false
+set recolor-keephue       true
+
+include ../themes/current/zathura

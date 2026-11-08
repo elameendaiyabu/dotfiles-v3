@@ -322,6 +322,42 @@ EOF
 	cat "$tmp" >"$real" && rm -f "$tmp"
 }
 
+render_zathura() {
+	put zathura <<EOF
+set default-bg                "$BG"
+set default-fg                "$FG"
+set statusbar-bg              "$BG_DARK"
+set statusbar-fg              "$FG_DIM"
+set inputbar-bg               "$BG_DARK"
+set inputbar-fg               "$FG"
+set notification-bg           "$SURFACE"
+set notification-fg           "$FG"
+set notification-error-bg     "$RED"
+set notification-error-fg     "$BG"
+set notification-warning-bg   "$YELLOW"
+set notification-warning-fg   "$BG"
+set completion-bg             "$BG_DARK"
+set completion-fg             "$FG_DIM"
+set completion-group-bg       "$BG_DARK"
+set completion-group-fg       "$ACCENT2"
+set completion-highlight-bg   "$SEL"
+set completion-highlight-fg   "$FG"
+set index-bg                  "$BG"
+set index-fg                  "$FG_DIM"
+set index-active-bg           "$SEL"
+set index-active-fg           "$FG"
+set highlight-color           "rgba($(hex_rgb "$YELLOW"),0.4)"
+set highlight-active-color    "rgba($(hex_rgb "$ACCENT"),0.5)"
+set highlight-fg              "$BG"
+set render-loading-bg         "$BG"
+set render-loading-fg         "$FG_DIM"
+set recolor-lightcolor        "$BG"
+set recolor-darkcolor         "$FG"
+EOF
+}
+
+hex_rgb() { local h=${1#\#}; printf '%d,%d,%d' "0x${h:0:2}" "0x${h:2:2}" "0x${h:4:2}"; }
+
 render_shell() {
 	put shell.sh <<EOF
 # sourced from ~/.bashrc
@@ -394,6 +430,13 @@ reload_all() {
 	if pgrep -u "$UID" -x dunst >/dev/null; then dunstctl reload 2>/dev/null || true; fi
 	pkill -USR2 -x btop 2>/dev/null || true           # btop: reload config
 	# neovim watches ~/.config/themes/current/nvim.lua by itself
+	# zathura: re-source zathurarc in every open window over D-Bus
+	if command -v busctl >/dev/null; then
+		busctl --user list --no-legend 2>/dev/null | awk '$1 ~ /^org\.pwmt\.zathura\.PID-/ {print $1}' |
+			while read -r svc; do
+				busctl --user call "$svc" /org/pwmt/zathura org.pwmt.zathura ExecuteCommand s source >/dev/null 2>&1 || true
+			done
+	fi
 	wait
 }
 
@@ -415,7 +458,7 @@ apply() {
 
 	render_i3; render_polybar; render_rofi; render_kitty; render_ghostty
 	render_tmux; render_dunst; render_btop; render_nvim; render_starship
-	render_shell; render_gtk
+	render_zathura; render_shell; render_gtk
 	render_images "$wall"
 	render_preview "$name"
 	reload_all "$wall"
